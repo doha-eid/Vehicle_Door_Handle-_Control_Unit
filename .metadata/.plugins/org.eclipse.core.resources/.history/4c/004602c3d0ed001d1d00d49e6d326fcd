@@ -1,0 +1,53 @@
+/******************************************************************************
+ * File Name: GPT.h
+ * Description: Header file of GPT driver
+ * Author: - Doha Eid
+ *   	   - Amira Mohamed
+ *   	   - Mayar Ehab
+ *   	   - Mariam Ezzat
+ ******************************************************************************/
+#ifndef GPT_H_
+#define GPT_H_
+/*******************************************************************************************
+ * 											Includes										*
+ ******************************************************************************************/
+
+
+/******************************************************************************************************
+ *                                Functions Prototypes                                               *
+ ******************************************************************************************************/
+/*
+ * Service Name     : GPT_Init
+ * Parameters (in)  : void
+ * Parameters (Out) : void
+ * Description     : A function to initialize the GPT registers with the needed initial values
+ * to support the needed timing actions.
+ */
+void GPT_Init(void);
+/*
+ * Service Name     : GPT_StartTimer
+ * Parameters (in)  : unsigned long int OverFlowTicks
+ * Parameters (Out) : void
+ * Description      : A function to request the GPT to start and send its number of tickets before timer
+ * 	overflow and stop.
+ */
+void GPT_StartTimer(unsigned long int OverFlowTicks);
+/*
+ * Service Name     : GPT_CheckTimeIsElapsed
+ * Parameters (in)  : void
+ * Parameters (Out) : unsigned char
+ * Description      : A function to return (1) if an overflow occurred after the last call of GPT_StartTimer and
+ * (0) if no overflow occurred or GPT_StartTimer is not called from the last read.
+ */
+unsigned char GPT_CheckTimeIsElapsed(void);
+/*
+ * Service Name     : GPT_GetElapsedTime
+ * Parameters (in)  : void
+ * Parameters (Out) : unsigned long int
+ * Description      : A function to return number of elapsed ticks from the last call of the GPT_StartTimer, 0 if
+ * it is not called and 0xffffffff if an overflow occurred.
+ */
+unsigned long int GPT_GetElapsedTime(void);
+unsigned long int GPT_GetRemainingTime(void);
+
+#endif /* GPT_H_ */

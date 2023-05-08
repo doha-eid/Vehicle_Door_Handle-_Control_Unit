@@ -1,0 +1,12 @@
+/******************************************************************************
+ * File Name: Functions.c
+ * Description: Source file of Functions that used in main function
+ * Author: - Doha Eid
+ *   	   - Amira Mohamed
+ *   	   - Mayar Ehab
+ *   	   - Mariam Ezzat
+ ******************************************************************************/
+
+#include"Functions.h"
+
+

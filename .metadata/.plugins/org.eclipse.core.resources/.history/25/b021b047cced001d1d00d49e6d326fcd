@@ -1,0 +1,17 @@
+/*
+ * Functions.h
+ *
+ *  Created on: May 8, 2023
+ *      Author: w
+ */
+
+#ifndef FUNCTIONS_H_
+#define FUNCTIONS_H
+
+#include"GPT.h"
+#include"Gpio.h"
+
+
+
+
+#endif /* FUNCTIONS_H_ */

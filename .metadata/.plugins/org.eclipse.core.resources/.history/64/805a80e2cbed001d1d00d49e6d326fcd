@@ -1,0 +1,17 @@
+/*
+ * File Name: main.c
+ * Description: Source file of main function
+ *  Created on: May 8, 2023
+ *      Author: w
+ */
+
+#include"main.h"
+
+int main (){
+	while(1){
+
+	}
+	return 0;
+}
+
+
