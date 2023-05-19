@@ -20,14 +20,14 @@ C_DEPS += \
 system/src/cmsis/system_stm32f4xx.o: ../system/src/cmsis/system_stm32f4xx.c system/src/cmsis/subdir.mk
 	@echo 'Building file: $<'
 	@echo 'Invoking: GNU Arm Cross C Compiler'
-	arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=soft -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections -ffreestanding -Wall -Wextra -g -DNDEBUG -DSTM32F401xE -DHSE_VALUE=8000000 -I"../include" -I"C:\Users\w\OneDrive\Documents\Second Term\Embedded\Final Project\Final_Project\Gpio" -I"C:\Users\w\OneDrive\Documents\Second Term\Embedded\Final Project\Final_Project\GPT" -I"C:\Users\w\OneDrive\Documents\Second Term\Embedded\Final Project\Final_Project\Rcc" -I"C:\Users\w\OneDrive\Documents\Second Term\Embedded\Final Project\Final_Project\Lib" -I"../system/include" -I"../system/include/cmsis" -I"../system/include/stm32f4-hal" -std=gnu11 -Wno-padded -MMD -MP -MF"$(@:%.o=%.d)" -MT"$@" -c -o "$@" "$<"
+	arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=soft -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections -ffreestanding -Wall -Wextra -g -DNDEBUG -DSTM32F401xE -DHSE_VALUE=8000000 -I"../include" -I"C:\Users\Dell\Desktop\Vehicle_Door_Handle-_Control_Unit\Final_Project\Gpio" -I"C:\Users\Dell\Desktop\Vehicle_Door_Handle-_Control_Unit\Final_Project\GPT" -I"C:\Users\Dell\Desktop\Vehicle_Door_Handle-_Control_Unit\Final_Project\Rcc" -I"C:\Users\Dell\Desktop\Vehicle_Door_Handle-_Control_Unit\Final_Project\Lib" -I"../system/include" -I"../system/include/cmsis" -I"../system/include/stm32f4-hal" -std=gnu11 -Wno-padded -MMD -MP -MF"$(@:%.o=%.d)" -MT"$@" -c -o "$@" "$<"
 	@echo 'Finished building: $<'
 	@echo ' '
 
 system/src/cmsis/%.o: ../system/src/cmsis/%.c system/src/cmsis/subdir.mk
 	@echo 'Building file: $<'
 	@echo 'Invoking: GNU Arm Cross C Compiler'
-	arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=soft -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections -ffreestanding -Wall -Wextra -g -DNDEBUG -DSTM32F401xE -DHSE_VALUE=8000000 -I"../include" -I"C:\Users\w\OneDrive\Documents\Second Term\Embedded\Final Project\Final_Project\Gpio" -I"C:\Users\w\OneDrive\Documents\Second Term\Embedded\Final Project\Final_Project\GPT" -I"C:\Users\w\OneDrive\Documents\Second Term\Embedded\Final Project\Final_Project\Rcc" -I"C:\Users\w\OneDrive\Documents\Second Term\Embedded\Final Project\Final_Project\Lib" -I"../system/include" -I"../system/include/cmsis" -I"../system/include/stm32f4-hal" -std=gnu11 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$@" -c -o "$@" "$<"
+	arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=soft -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections -ffreestanding -Wall -Wextra -g -DNDEBUG -DSTM32F401xE -DHSE_VALUE=8000000 -I"../include" -I"C:\Users\Dell\Desktop\Vehicle_Door_Handle-_Control_Unit\Final_Project\Gpio" -I"C:\Users\Dell\Desktop\Vehicle_Door_Handle-_Control_Unit\Final_Project\GPT" -I"C:\Users\Dell\Desktop\Vehicle_Door_Handle-_Control_Unit\Final_Project\Rcc" -I"C:\Users\Dell\Desktop\Vehicle_Door_Handle-_Control_Unit\Final_Project\Lib" -I"../system/include" -I"../system/include/cmsis" -I"../system/include/stm32f4-hal" -std=gnu11 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$@" -c -o "$@" "$<"
 	@echo 'Finished building: $<'
 	@echo ' '
 
