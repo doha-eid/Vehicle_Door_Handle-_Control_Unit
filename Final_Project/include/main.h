@@ -17,9 +17,9 @@
 
 /************************Definitions************************/
 #define VEHICLE_PORT	GPIO_A
-#define pin_led_vehicle    1
-#define pin_led_hazard     2
-#define pin_led_Ambient    3
+#define pin_led_vehicle    0
+#define pin_led_hazard     1
+#define pin_led_Ambient    2
 
 #define pin_button_handle  4
 #define pin_button_door    5
