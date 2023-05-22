@@ -25,11 +25,17 @@
 #define pin_button_door    5
 
 /********************Functions Prototypes*******************/
-uint8 default_state();
-uint8 door_unlock();
-uint8 door_lock();
-uint8 door_open();
-uint8 door_close();
-uint8 door_anti_theft();
+uint8 is_door_opened();
+uint8 is_door_locked();
+
+
+void door_is_open();
+void door_unlock();
+void locking_the_door();
+void closing_the_door();
+void anti_theft_vehicle_lock();
+void default_state();
+
+
 void Delay_us(uint32 us);
 #endif /* MAIN_H_ */

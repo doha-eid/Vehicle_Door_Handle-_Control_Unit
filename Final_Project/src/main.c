@@ -17,18 +17,23 @@
 
 // variables
 
-
+uint8 door_locked=1;
+uint8 door_opened=0;
+//uint8 push_button_handle;
+//uint8 push_button_handle_unlock;
+//uint8 push_button_door;
+//uint8 push_button_door_lock;
 	// active low
 
 //	unlock
-	uint8 push_button_handle_unlock = 0;
+
 //	lock
-	uint8 push_button_handle_lock = 1;
+//	uint8 push_button_handle_lock = 1;
 
 //	unlock
-	uint8 push_button_door_unlock = 1;
+//	uint8 push_button_door_unlock = 1;
 //	lock
-	uint8 push_button_door_lock = 0;
+
 
 /*****************************Main Function*************************************/
 int main (){
@@ -48,183 +53,176 @@ int main (){
 //pin default state
 
 //	active high
-	Gpio_WritePin(VEHICLE_PORT, pin_led_vehicle, LOW);
-	Gpio_WritePin(VEHICLE_PORT, pin_led_hazard, LOW);
-	Gpio_WritePin(VEHICLE_PORT, pin_led_Ambient, LOW);
+//	Gpio_WritePin(VEHICLE_PORT, pin_led_vehicle, LOW);
+//	Gpio_WritePin(VEHICLE_PORT, pin_led_hazard, LOW);
+//	Gpio_WritePin(VEHICLE_PORT, pin_led_Ambient, LOW);
 
-//	active low
-	Gpio_WritePin(VEHICLE_PORT, pin_button_handle, push_button_handle_lock);
-	Gpio_WritePin(VEHICLE_PORT, pin_button_door, push_button_door_lock);
+	uint8 push_button_handle_state = 0;
+	uint8 push_button_handle_prev_state = 0;
+	uint8 push_button_handle_is_pressed = 0;
+
+	uint8 push_button_door_state = 0;
+	uint8 push_button_door_prev_state = 0;
+	uint8 push_button_door_is_pressed = 0;
 
 
 while(1){
+	//reading btn state
+	push_button_handle_state = Gpio_ReadPin(VEHICLE_PORT,pin_button_handle);
+	//check for falling edge
+	if(push_button_handle_state == 0 && push_button_handle_prev_state == 1) {
+		push_button_handle_is_pressed = 1;}
+	//waiting for de-bouncing
+	Delay_us(100000);
+	//updating button previous state
+	push_button_handle_prev_state = push_button_handle_state;
+	//reading btn state
+	push_button_door_state = Gpio_ReadPin(VEHICLE_PORT,pin_button_door);
+	//check for falling edge
+	if(push_button_door_state == 0 && push_button_door_prev_state == 1) {
+		push_button_door_is_pressed = 1;}
+	//waiting for de-bouncing
+	Delay_us(100000);
+	//updating button previous state
+	push_button_door_prev_state = push_button_door_state;
 
-	uint8 handle_state = Gpio_ReadPin(VEHICLE_PORT,pin_button_handle);
-	if (handle_state == 1){
-		//	unlock
-			push_button_handle_unlock = 1;
-		//	lock
-			push_button_handle_lock = 0;
+	if(push_button_handle_is_pressed){
+		if(is_door_opened()){
+			door_is_open();
+			push_button_handle_is_pressed=0;
+		}
+		else if(is_door_locked()){
+			door_unlock();
+			push_button_handle_is_pressed=0;
+		}
+		else{
+			locking_the_door();
+			push_button_handle_is_pressed=0;
+		}
 	}
-	else{
-		//	unlock
-			push_button_handle_unlock = 0;
-		//	lock
-			push_button_handle_unlock = 1;
+
+	else if (push_button_door_is_pressed){
+		if(is_door_locked()){
+			default_state();
+			push_button_door_is_pressed=0;
+		}
+		else if(!is_door_opened()){
+			door_is_open();
+			push_button_door_is_pressed=0;
+		}
+		else{
+			closing_the_door();
+			push_button_door_is_pressed=0;
+		}
 	}
-
-	uint8 door_state = Gpio_ReadPin(VEHICLE_PORT,pin_button_door);
-	if (door_state == 1){
-		//	unlock
-			push_button_door_unlock = 1;
-		//	lock
-			push_button_door_lock = 0;
-	}
-	else{
-		//	unlock
-			push_button_door_lock = 0;
-		//	lock
-			push_button_door_unlock = 1;
-	}
-
-	uint8 unlock= door_unlock();
-	uint8 open= door_open();
-	uint8 anti= door_anti_theft();
-	uint8 close= door_close();
-	uint8 lock= door_lock();
-
-
-
-		if(unlock){
-			Gpio_WritePin(VEHICLE_PORT, pin_led_vehicle, HIGH);
-			for(uint8 i=0; i<1; i++){
-				Gpio_WritePin(VEHICLE_PORT, pin_led_hazard, HIGH);
-				Delay_us(500000);
-				Gpio_WritePin(VEHICLE_PORT, pin_led_hazard, LOW);
-		}
-			Gpio_WritePin(VEHICLE_PORT, pin_led_Ambient, HIGH);
-			Delay_us(2000000);
-			Gpio_WritePin(VEHICLE_PORT, pin_led_Ambient, LOW);
-		}
-
-		else if(open){
-
-			Gpio_WritePin(VEHICLE_PORT, pin_led_vehicle, LOW);
-			Gpio_WritePin(VEHICLE_PORT, pin_led_hazard, LOW);
-			Gpio_WritePin(VEHICLE_PORT, pin_led_Ambient, HIGH);
-		}
-
-		else if(anti){
-			Gpio_WritePin(VEHICLE_PORT, pin_led_vehicle, LOW);
-			for(uint8 i=0; i<2; i++){
-				Gpio_WritePin(VEHICLE_PORT, pin_led_hazard, HIGH);
-				Delay_us(500000);
-				Gpio_WritePin(VEHICLE_PORT, pin_led_hazard, LOW);
-				Delay_us(500000);
-		}
-			Gpio_WritePin(VEHICLE_PORT, pin_led_Ambient, LOW);
-
-
-		}
-
-		else if(close){
-			Gpio_WritePin(VEHICLE_PORT, pin_led_vehicle, LOW);
-			Gpio_WritePin(VEHICLE_PORT, pin_led_hazard, LOW);
-			Gpio_WritePin(VEHICLE_PORT, pin_led_Ambient, HIGH);
-			Delay_us(1000000);
-			Gpio_WritePin(VEHICLE_PORT, pin_led_Ambient, LOW);
-
-		}
-
-		else if(lock){
-			Gpio_WritePin(VEHICLE_PORT, pin_led_vehicle, LOW);
-			for(uint8 i=0; i<2; i++){
-				Gpio_WritePin(VEHICLE_PORT, pin_led_hazard, HIGH);
-				Delay_us(500000);
-				Gpio_WritePin(VEHICLE_PORT, pin_led_hazard, LOW);
-				Delay_us(500000);
-		}
-			Gpio_WritePin(VEHICLE_PORT, pin_led_Ambient, LOW);
-		}
-
-		else {
-			Gpio_WritePin(VEHICLE_PORT, pin_led_vehicle, LOW);
-			Gpio_WritePin(VEHICLE_PORT, pin_led_hazard, LOW);
-			Gpio_WritePin(VEHICLE_PORT, pin_led_Ambient, LOW);
-		}
+//	else{
+//		if(!is_door_locked() && !is_door_opened() ){
+//			anti_theft_vehicle_lock();
+//		}
+//		else{ default_state();
+//		}
+//	}
 }
-		return 0;
+return 0;
 }
+
 
 void Delay_us(uint32 us){
 	for(uint32 i=0;i<us;i++);
 }
 
-
-uint8 door_unlock(){
-
-	if(door_lock() && push_button_handle_unlock){
+uint8 is_door_opened(){
+	if (door_opened){
 		return 1;
 	}
-	else{
+	else {
 		return 0;
 	}
-
 }
 
-uint8 door_open(){
-
-	if(door_unlock() && door_close() && push_button_door_unlock){
+uint8 is_door_locked(){
+	if (door_locked){
 		return 1;
 	}
-	else{
+	else {
 		return 0;
 	}
+}
+
+void default_state(){
+	door_locked=1;
+	door_opened=0;
+	Gpio_WritePin(VEHICLE_PORT, pin_led_vehicle, LOW);
+	Gpio_WritePin(VEHICLE_PORT, pin_led_hazard, LOW);
+	Gpio_WritePin(VEHICLE_PORT, pin_led_Ambient, LOW);
+
 
 }
 
-uint8 door_anti_theft(){
-
-	if(door_unlock() && door_close()){
-
-		for(uint32 i=0;i<10000000;i++){
-
-			if(push_button_handle_lock && push_button_door_lock){
-
-				return 1;
-			}
-			else{
-
-				return 0;
-			}
-		}
-
+void door_unlock(){
+	door_locked=0;
+	door_opened=0;
+	Gpio_WritePin(VEHICLE_PORT, pin_led_vehicle, HIGH);
+	for(uint8 i=0; i<1; i++){
+		Gpio_WritePin(VEHICLE_PORT, pin_led_hazard, HIGH);
+		Delay_us(500000);
+		Gpio_WritePin(VEHICLE_PORT, pin_led_hazard, LOW);
+		Delay_us(500000);
 	}
-	else{
-		return 0;
+	Gpio_WritePin(VEHICLE_PORT, pin_led_Ambient, HIGH);
+	Delay_us(2000000);
+	Gpio_WritePin(VEHICLE_PORT, pin_led_Ambient, LOW);
+}
+
+void door_is_open(){
+	door_locked=0;
+	door_opened=1;
+	Gpio_WritePin(VEHICLE_PORT, pin_led_vehicle, LOW);
+	Gpio_WritePin(VEHICLE_PORT, pin_led_hazard, LOW);
+	Gpio_WritePin(VEHICLE_PORT, pin_led_Ambient, HIGH);
+}
+
+void anti_theft_vehicle_lock(){
+	door_locked=1;
+	door_opened=0;
+	Gpio_WritePin(VEHICLE_PORT, pin_led_vehicle, LOW);
+	for(uint8 i=0; i<2; i++){
+		Gpio_WritePin(VEHICLE_PORT, pin_led_hazard, HIGH);
+		Delay_us(500000);
+		Gpio_WritePin(VEHICLE_PORT, pin_led_hazard, LOW);
+		Delay_us(500000);
 	}
+	Gpio_WritePin(VEHICLE_PORT, pin_led_Ambient, LOW);
 
 }
 
-uint8 door_close(){
-
-	if(door_unlock() && door_open() && push_button_door_lock){
-		return 1;
-	}
-	else{
-		return 0;
-	}
-
-}
-
-uint8 door_lock(){
-
-	if(door_unlock() && door_open() && push_button_door_lock){
-		return 1;
-	}
-	else{
-		return 0;
-	}
+void closing_the_door(){
+	door_locked=0;
+	door_opened=0;
+	Gpio_WritePin(VEHICLE_PORT, pin_led_vehicle, LOW);
+	Gpio_WritePin(VEHICLE_PORT, pin_led_hazard, LOW);
+	Gpio_WritePin(VEHICLE_PORT, pin_led_Ambient, HIGH);
+	Delay_us(1000000);
+	Gpio_WritePin(VEHICLE_PORT, pin_led_Ambient, LOW);
 
 }
+
+void locking_the_door(){
+	door_locked=1;
+	door_opened=0;
+	Gpio_WritePin(VEHICLE_PORT, pin_led_vehicle, LOW);
+	for(uint8 i=0; i<2; i++){
+		Gpio_WritePin(VEHICLE_PORT, pin_led_hazard, HIGH);
+		Delay_us(500000);
+		Gpio_WritePin(VEHICLE_PORT, pin_led_hazard, LOW);
+		Delay_us(500000);
+	}
+	Gpio_WritePin(VEHICLE_PORT, pin_led_Ambient, LOW);
+}
+
+
+
+
+
+
 
